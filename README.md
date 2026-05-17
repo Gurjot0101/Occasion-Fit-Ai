@@ -264,10 +264,16 @@ server.port=8080
 - [ ] Outfit calendar planning
 - [ ] Push notifications
 
-- [ ] ## Agentic Architecture (In Progress)
+---
+
+## 🤖 Agentic Architecture (In Progress)
 - AI autonomously selects and chains tools based on user goal
 - Gemini Function Calling for multi-step reasoning
 - Planned tools: wardrobe fetch, image analysis, weather, gap detection
+
+---
+
+## 🤝 Contributing
 
 ---
 
