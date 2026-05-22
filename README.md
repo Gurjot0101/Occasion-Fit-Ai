@@ -1,5 +1,4 @@
 # OccasionFit AI
-(Private Repo)
 
 OccasionFit AI is a full-stack cross-platform mobile application that provides AI-powered personalized outfit recommendations through an intelligent conversational interface. Built end-to-end from architecture to deployment, the app leverages multiple specialized AI models for chat, image generation, image analysis, and context management.
 
