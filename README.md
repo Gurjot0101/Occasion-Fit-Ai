@@ -16,7 +16,7 @@
 
 ![OccasionFit Demo](docs/demo.gif)
 
-[Features](#-features) · [Architecture](#-agentic-architecture) · [Tech Stack](#-tech-stack) · [Roadmap](#-roadmap)
+[Features](#-features) · [Architecture](#-agentic-architecture) · [Tech Stack](#-tech-stack) · [Roadmap](#roadmap)
 
 </div>
 
@@ -231,6 +231,7 @@ src/main/java/com/occasionfit/backend/
 
 ---
 
+<a id="roadmap"></a>
 ## 🛣️ Roadmap
 
 > **Why no LangChain4j, LangGraph4j, or MCP?**
