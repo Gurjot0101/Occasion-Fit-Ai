@@ -16,7 +16,7 @@
 
 ![OccasionFit Demo](docs/demo.gif)
 
-[Features](#-features) · [Architecture](#-agentic-architecture) · [Tech Stack](#-tech-stack) · [Roadmap](#roadmap)
+[Features](#-features) · [Architecture](#-agentic-architecture) · [Tech Stack](#tech-stack) · [Roadmap](#roadmap)
 
 </div>
 
@@ -151,6 +151,7 @@ this.toolRegistry = tools.stream()
 
 ---
 
+<a id="tech-stack"></a>
 ## 🛠️ Tech Stack
 
 | Layer | Technology | Why |
