@@ -1,6 +1,8 @@
 <div align="center">
 
-![OccasionFit AI Architecture](assets/owicon.png)
+<p align="center">
+  <img src="assets/owicon.png" alt="" width="90">
+</p>
 # OccasionFit AI
 
 ### *Staring at your wardrobe for 20 minutes? Friends can't agree on what suits you?*
