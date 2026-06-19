@@ -38,7 +38,7 @@ The technical centrepiece is a **planner-based agentic backend** — rather than
 
 The app is live — install in 30 seconds via EAS.
 
-**[📲 Install on Android](https://expo.dev/artifacts/eas/YaSDCVqQoHONRQZ0pLtHU5SNjkj7zx2SPoMKuCIOkUU.apk)** · *iOS — coming soon*
+**[📲 Install on Android](https://github.com/Gurjot0101/occasionfit-ai/releases/download/0.0.1/OccasionFit.Ai.v0.0.1.apk)** · *iOS — coming soon*
 
 No Play Store required — installs directly via EAS internal distribution.
 
