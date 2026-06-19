@@ -16,7 +16,7 @@
 
 ![OccasionFit Demo](docs/demo.gif)
 
-[Features](#-features) · [Architecture](#-agentic-architecture) · [Tech Stack](#-tech-stack) · [Setup](#-setup) · [Roadmap](#-roadmap)
+[Features](#-features) · [Architecture](#-agentic-architecture) · [Tech Stack](#-tech-stack) · [Roadmap](#-roadmap)
 
 </div>
 
