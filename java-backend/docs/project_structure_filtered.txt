@@ -22,6 +22,7 @@ pom.xml
                             ├── AgentOrchestrator.java
                             ├── AgentPlan.java
                             ├── AgentResult.java
+                            ├── PlannedStep.java
                             └── [tools]
                                 ├── AgentTool.java
                                 ├── [impl]
@@ -35,7 +36,8 @@ pom.xml
                         ├── [ai]
                             ├── [client]
                                 ├── GeminiClient.java
-                                └── OpenAiClient.java
+                                ├── OpenAiClient.java
+                                └── PollinationsClient.java
                             ├── PlannerService.java
                             └── [prompt]
                                 ├── PromptBuilder.java

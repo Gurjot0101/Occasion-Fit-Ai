@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.occasionfit.backend.agent.AgentContext;
 import com.occasionfit.backend.agent.AgentPlan;
+import com.occasionfit.backend.agent.PlannedStep;
 import com.occasionfit.backend.agent.tools.AgentTool;
 import com.occasionfit.backend.ai.prompt.PromptBuilder;
 import com.occasionfit.backend.ai.prompt.PromptCleaner;
@@ -269,11 +270,27 @@ public class OpenAiClient {
         raw = raw.replaceAll("```json|```", "").trim();
         JsonNode root = new ObjectMapper().readTree(raw);
 
-        List<AgentTool> steps = new ArrayList<>();
-        for (JsonNode step : root.get("steps"))
-            steps.add(AgentTool.valueOf(step.asText()));
+        Map<AgentTool, Map<String, Object>> toolInputs = new HashMap<>();
+        JsonNode inputs = root.get("toolInputs");
+        if (inputs != null) {
+            inputs.fields().forEachRemaining(entry -> {
+                AgentTool tool = AgentTool.valueOf(entry.getKey());
+                Map<String, Object> params = new ObjectMapper().convertValue(entry.getValue(), Map.class);
+                toolInputs.put(tool, params);
+            });
+        }
 
-        log.info("OpenAI Execution plan: {}", steps);
+        // ✅ Build PlannedStep list — each step carries its own inputs
+        List<PlannedStep> steps = new ArrayList<>();
+        for (JsonNode stepNode : root.get("steps")) {
+            AgentTool tool = AgentTool.valueOf(stepNode.asText());
+            steps.add(PlannedStep.builder()
+                    .tool(tool)
+                    .inputs(toolInputs.getOrDefault(tool, new HashMap<>()))
+                    .build());
+        }
+
+        log.info("OpenAI Execution plan: {}", steps.stream().map(s -> s.getTool().name()).toList());
         return AgentPlan.builder().steps(steps).build();
     }
 

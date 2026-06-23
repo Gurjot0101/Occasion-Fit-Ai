@@ -9,6 +9,7 @@ import com.google.genai.types.GenerateContentResponse;
 import com.google.genai.types.Part;
 import com.occasionfit.backend.agent.AgentContext;
 import com.occasionfit.backend.agent.AgentPlan;
+import com.occasionfit.backend.agent.PlannedStep;
 import com.occasionfit.backend.agent.tools.AgentTool;
 import com.occasionfit.backend.ai.prompt.PromptBuilder;
 import com.occasionfit.backend.ai.prompt.PromptCleaner;
@@ -21,10 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Service
@@ -271,10 +269,37 @@ public class GeminiClient {
         raw = raw.replaceAll("```json|```", "").trim();
         JsonNode root = objectMapper.readTree(raw);
 
-        List<AgentTool> steps = new ArrayList<>();
-        for (JsonNode step : root.get("steps"))
-            steps.add(AgentTool.valueOf(step.asText()));
+        Map<AgentTool, Map<String, Object>> toolInputs = new HashMap<>();
+        JsonNode inputs = root.get("toolInputs");
+        if (inputs != null) {
+            inputs.fields().forEachRemaining(entry -> {
+                try {
+                    AgentTool tool = AgentTool.valueOf(entry.getKey());
+                    Map<String, Object> params = objectMapper.convertValue(entry.getValue(), Map.class);
+                    toolInputs.put(tool, params);
+                } catch (IllegalArgumentException e) {
+                    log.warn("Unknown tool in toolInputs, skipping: '{}'", entry.getKey());
+                }
+            });
+        }
 
+        List<PlannedStep> steps = new ArrayList<>();
+        for (JsonNode stepNode : root.get("steps")) {
+            String toolName = stepNode.asText().trim();
+            try {
+                AgentTool tool = AgentTool.valueOf(toolName);
+                steps.add(PlannedStep.builder()
+                        .tool(tool)
+                        .inputs(toolInputs.getOrDefault(tool, new HashMap<>()))
+                        .build());
+            } catch (IllegalArgumentException e) {
+                log.warn("Unknown tool in plan, skipping: '{}'", toolName);
+            }
+        }
+
+        if (steps.isEmpty()) throw new Exception("Plan produced no valid steps");
+
+        log.info("Gemini execution plan: {}", steps.stream().map(s -> s.getTool().name()).toList());
         return AgentPlan.builder().steps(steps).build();
     }
 
@@ -302,7 +327,7 @@ public class GeminiClient {
             return "Sorry, I couldn't generate a response. Please try again.";
         }
     }
-    
+
     private record ImageData(byte[] bytes, String mimeType) {
     }
 

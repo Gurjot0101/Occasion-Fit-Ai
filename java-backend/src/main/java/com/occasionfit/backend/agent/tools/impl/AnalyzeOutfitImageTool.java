@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component
 @Log4j2
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class AnalyzeOutfitImageTool implements ToolExecutor {
     }
 
     @Override
-    public ToolExecutionResult execute(AgentContext ctx) {
+    public ToolExecutionResult execute(Map<String, Object> inputs, AgentContext ctx) {
         try {
             String result = geminiVisionService.analyzeOutfitImage(
                     ctx.getThreadContext(),

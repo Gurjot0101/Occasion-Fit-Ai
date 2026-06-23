@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 @Log4j2
@@ -24,10 +25,8 @@ public class CompareOutfitImagesTool implements ToolExecutor {
     }
 
     @Override
-    public ToolExecutionResult execute(AgentContext ctx) {
-
+    public ToolExecutionResult execute(Map<String, Object> inputs, AgentContext ctx) {
         List<String> images = ctx.getBase64Images();
-
         if (images == null || images.size() < 2) {
             return ToolExecutionResult.failure("At least 2 images required for comparison.");
         }

@@ -8,6 +8,8 @@ import com.occasionfit.backend.ai.client.GeminiClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 public class GenerateTextResponseTool implements ToolExecutor {
@@ -20,17 +22,10 @@ public class GenerateTextResponseTool implements ToolExecutor {
     }
 
     @Override
-    public ToolExecutionResult execute(AgentContext ctx) {
-        String result;
-        if (ctx.hasExecutedActions()) {
-            result = geminiChatService.synthesizeFinalResponse(ctx);
-        } else {
-            result = geminiChatService.generateResponse(
-                    ctx.getThreadContext(),
-                    ctx.getUserMessage(),
-                    ctx.getRecentMessages()
-            );
-        }
+    public ToolExecutionResult execute(Map<String, Object> inputs, AgentContext ctx) {
+        String result = ctx.hasExecutedActions()
+                ? geminiChatService.synthesizeFinalResponse(ctx)
+                : geminiChatService.generateResponse(ctx.getThreadContext(), ctx.getUserMessage(), ctx.getRecentMessages());
         return ToolExecutionResult.success(result);
     }
 }

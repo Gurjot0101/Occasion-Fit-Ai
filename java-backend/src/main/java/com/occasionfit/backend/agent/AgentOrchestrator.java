@@ -33,24 +33,30 @@ public class AgentOrchestrator {
 
     public AgentResult run(AgentContext ctx) {
         AgentPlan plan = plannerService.plan(ctx);
-        log.info("Execution plan: {}", plan.getSteps());
+        log.info("Execution plan: {}", plan.getSteps().stream()
+                .map(s -> s.getTool().name()).toList());
 
         String generatedImage = null;
 
-        for (AgentTool tool : plan.getSteps()) {
-            log.info("Executing tool: {}", tool);
-            ToolExecutionResult result = executeTool(tool, ctx);
+        for (PlannedStep step : plan.getSteps()) {
+            log.info("Executing tool: {} with inputs: {}", step.getTool(), step.getInputs());
+            ToolExecutionResult result = executeTool(step, ctx);
+
+            String contextResult;
+            if (step.getTool() == AgentTool.GENERATE_OUTFIT_IMAGE && result.isSuccess()) {
+                generatedImage = result.getOutput();
+                contextResult = "Outfit image generated successfully.";
+            } else {
+                contextResult = result.isSuccess() ? result.getOutput() : result.getErrorMessage();
+            }
 
             ctx.addAction(AgentAction.builder()
-                    .tool(tool)
-                    .toolResult(result.isSuccess() ? result.getOutput() : result.getErrorMessage())
+                    .tool(step.getTool())
+                    .toolResult(contextResult)
                     .build());
 
-            if (tool == AgentTool.GENERATE_OUTFIT_IMAGE && result.isSuccess())
-                generatedImage = result.getOutput();
-
             if (!result.isSuccess()) {
-                log.warn("Tool {} failed — aborting plan", tool);
+                log.warn("Tool {} failed — aborting plan", step.getTool());
                 break;
             }
         }
@@ -75,12 +81,12 @@ public class AgentOrchestrator {
         return new AgentResult(text, generatedImage);
     }
 
-    private ToolExecutionResult executeTool(AgentTool tool, AgentContext ctx) {
-        ToolExecutor executor = toolRegistry.get(tool);
+    private ToolExecutionResult executeTool(PlannedStep step, AgentContext ctx) {
+        ToolExecutor executor = toolRegistry.get(step.getTool());
         if (executor == null) {
-            log.error("No executor registered for tool: {}", tool);
-            return ToolExecutionResult.failure("Unsupported tool: " + tool);
+            log.error("No executor registered for tool: {}", step.getTool());
+            return ToolExecutionResult.failure("Unsupported tool: " + step.getTool());
         }
-        return executor.execute(ctx);
+        return executor.execute(step.getInputs(), ctx);
     }
 }

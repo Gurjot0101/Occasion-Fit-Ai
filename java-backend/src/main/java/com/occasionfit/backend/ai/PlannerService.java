@@ -2,12 +2,14 @@ package com.occasionfit.backend.ai;
 
 import com.occasionfit.backend.agent.AgentContext;
 import com.occasionfit.backend.agent.AgentPlan;
+import com.occasionfit.backend.agent.PlannedStep;
 import com.occasionfit.backend.agent.tools.AgentTool;
 import com.occasionfit.backend.ai.client.GeminiClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -28,7 +30,12 @@ public class PlannerService {
 
     private AgentPlan fallbackPlan() {
         return AgentPlan.builder()
-                .steps(List.of(AgentTool.GENERATE_TEXT_RESPONSE))
+                .steps(List.of(
+                        PlannedStep.builder()
+                                .tool(AgentTool.GENERATE_TEXT_RESPONSE)
+                                .inputs(new HashMap<>())
+                                .build()
+                ))
                 .build();
     }
 }
