@@ -67,7 +67,7 @@ or drop a message on [LinkedIn](https://linkedin.com/in/gurjot0101).
 - Upload 1 or multiple images from gallery
 - **Analyze** — Gemini Vision describes outfit and suggests styling
 - **Compare** — Upload 2+ outfits, get a side-by-side recommendation
-- **Generate** — Text-to-image via Imagen for outfit visualization
+- **Generate** — Text-to-image via Flux Schnell (Pollinations AI) for outfit visualization
 - Multi-modal messages (text + images stored per message)
 
 ### 🎨 UI
@@ -101,7 +101,7 @@ User Message + Image Count
          ▼
    PlannerService                     ← 1 Gemini call, temperature=0.1
          │
-         ▼  {"steps": ["ANALYZE_OUTFIT_IMAGE", "GENERATE_TEXT_RESPONSE"]}
+         ▼  {"steps": [{"tool": "ANALYZE_OUTFIT_IMAGE"}, {"tool": "GENERATE_TEXT_RESPONSE"}]}
     AgentPlan
          │
          ▼
@@ -136,7 +136,7 @@ this.toolRegistry = tools.stream()
 | `DIRECT_REPLY` | Greetings, off-topic, missing image | Gemini text |
 | `ANALYZE_OUTFIT_IMAGE` | 1 image uploaded | Gemini Vision |
 | `COMPARE_OUTFIT_IMAGES` | 2+ images uploaded | Gemini Vision |
-| `GENERATE_OUTFIT_IMAGE` | Generate intent, no image | Imagen |
+| `GENERATE_OUTFIT_IMAGE` | Generate intent, no image | Flux Schnell (Pollinations AI) |
 | `GENERATE_TEXT_RESPONSE` | Final response after analysis | Gemini text |
 
 ### Example Plans
@@ -180,7 +180,7 @@ this.toolRegistry = tools.stream()
 | Database | MongoDB Atlas | Flexible schema for message/thread models |
 | AI — Planning & Chat | Google Gemini | Fast, cost-efficient text model |
 | AI — Vision | Gemini Vision | Multi-image outfit analysis |
-| AI — Image Gen | Google Imagen | High-quality fashion image generation |
+| AI — Image Gen | Flux Schnell (Pollinations AI) | Fast, low-cost fashion image generation |
 | AI — Fallback | OpenAI GPT-4 / DALL-E | Provider redundancy |
 | Deployment | GCP Cloud Run | Auto-scaling, CI/CD via Cloud Build |
 
@@ -211,7 +211,7 @@ src/main/java/com/occasionfit/backend/
 ├── agent/                    ← orchestration layer
 │   ├── AgentOrchestrator.java      pure executor — no routing logic
 │   ├── AgentContext.java           request state passed between tools
-│   ├── AgentPlan.java              List<AgentTool> steps from planner
+│   ├── AgentPlan.java              List<PlannedStep> — tool + resolved inputs
 │   └── tools/
 │       ├── ToolExecutor.java       interface — getToolType() + execute()
 │       ├── ToolExecutionResult.java
@@ -219,6 +219,7 @@ src/main/java/com/occasionfit/backend/
 ├── ai/                       ← intelligence layer
 │   ├── client/
 │   │   ├── GeminiClient.java       7 methods: chat, vision, imagen, plan, synthesize
+│   │   ├── PollinationsClient.java image generation via Flux Schnell, with secure generate-then-upload flow                     
 │   │   └── OpenAiClient.java       mirrors GeminiClient — drop-in fallback
 │   ├── PlannerService.java         calls generatePlan(), handles fallback
 │   └── prompt/
@@ -245,6 +246,9 @@ src/main/java/com/occasionfit/backend/
 - Tokens stored in device Keychain — never in AsyncStorage
 - Spring Security filter chain with custom JWT validation
 - Secrets managed via GCP Secret Manager in production
+- Third-party API keys (e.g. image generation) never exposed client-side —
+  generation happens server-side, with only key-free, publicly-served result
+  URLs returned to the frontend
 
 ---
 
@@ -283,7 +287,6 @@ AWS Certified Developer · Claude Certified Architect
 
 - GitHub: [@Gurjot0101](https://github.com/Gurjot0101)
 - LinkedIn: [linkedin.com/in/gurjot0101](https://linkedin.com/in/gurjot0101)
-- Email: gurjot78885@gmail.com
 
 ---
 
