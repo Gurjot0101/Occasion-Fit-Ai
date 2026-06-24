@@ -18,7 +18,9 @@
 [![GCP](https://img.shields.io/badge/GCP-Cloud_Run-blue?logo=googlecloud)](https://cloud.google.com/run)
 [![License](https://img.shields.io/badge/License-Proprietary-red)](#-license)
 
-![OccasionFit Demo](docs/demo.gif)
+![Dark/Light Mode](assets/darklightmode.gif)
+![OccasionFit Demo](assets/demo1.gif)
+![Demo 2](assets/demo2.gif)
 
 [Features](#-features) · [Architecture Diagram](#arch-diagram) · [Architecture](#-agentic-architecture) · [Tech Stack](#tech-stack) · [Roadmap](#roadmap)
 
