@@ -23,7 +23,7 @@
 <table align="center">
   <tr>
     <td align="center">
-      <img src="assets/darklightmode.gif" width="200"><br>
+      <img src="assets/darklightmode.gif" width="180"><br>
       <sub><b>Dark / Light Mode</b></sub>
     </td>
     <td align="center">
@@ -31,11 +31,11 @@
       <sub><b>Sample</b></sub>
     </td>
     <td align="center">
-      <img src="assets/demo1.gif" width="200"><br>
+      <img src="assets/demo1.gif" width="180"><br>
       <sub><b>Outfit Recommendation</b></sub>
     </td>
     <td align="center">
-      <img src="assets/demo2.gif" width="200"><br>
+      <img src="assets/demo2.gif" width="180"><br>
       <sub><b>Outfit Recommendation Demo2</b></sub>
     </td>
   </tr>
